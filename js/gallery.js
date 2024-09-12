@@ -50,11 +50,11 @@ const images = [
       },
       {
         preview:
-          'https://cdn.pixabay.com/photo/2019/05/16/21/10/landscape-4208255__340.jpg',
-        original:
-          'https://cdn.pixabay.com/photo/2019/05/16/21/10/landscape-4208255_1280.jpg',
-        description: 'Nature Landscape',
-      },
+     'https://cdn.pixabay.com/photo/2019/05/16/21/10/landscape-4208255__340.jpg',
+    original:
+     'https://cdn.pixabay.com/photo/2019/05/16/21/10/landscape-4208255_1280.jpg',
+     description: 'Nature Landscape',
+    },
       {
         preview:
           'https://cdn.pixabay.com/photo/2019/05/17/04/35/lighthouse-4208843__340.jpg',
@@ -68,14 +68,12 @@ const markingString = images
 	.map(
 		({ preview, original, description }) => `
 <li class="gallery-item">
-  <a class="gallery-link" href="${original}">
     <img
       class="gallery-image"
       src="${preview}"
-      data-source="${original}"
+      data-large-image="${original}"
       alt="${description}"
     />
-  </a>
 </li>
 `
 	)
@@ -88,25 +86,25 @@ gallery.addEventListener('click', oneClickToModal);
 
 //function for event click
 function oneClickToModal(event) {
-	event.preventDefault();
 
 	if (event.target.nodeName !== 'IMG') {
 		return;
 	}
 
-	const selectedItem = event.target.dataset.source;
+	const selectedItem = event.target.dataset.largeImage;
 	console.log(selectedItem);
 
 	const instance = basicLightbox.create(`
 		<img src="${selectedItem}" width="800" height="600">
 	`);
-
+const onPreviewClose = (event) => {
+  document.removeEventListener('keydown', onPreviewClose);
+  if (event.code === 'Escape'){
+    instance.close()
+    }
+}
 	instance.show();
 
-	gallery.addEventListener('keydown', (event) => {
-		if (event.code === 'Escape'){
-			instance.close()
-			}
-	});
+	document.addEventListener('keydown', onPreviewClose);
 
 }
